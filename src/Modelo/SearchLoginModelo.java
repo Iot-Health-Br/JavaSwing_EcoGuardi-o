@@ -1,11 +1,10 @@
 package Modelo;
-import Tela.LoginView;
 
-public class LoginModelo {
+public class SearchLoginModelo {
     private String username;
     private String password;
 
-    public LoginModelo(String user, String password){
+    public SearchLoginModelo(String user, String password){
         this.username = user;
         this.password = password;
     }

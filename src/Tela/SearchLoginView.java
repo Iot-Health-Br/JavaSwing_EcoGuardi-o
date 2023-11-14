@@ -1,14 +1,14 @@
 package Tela;
 
-import Controle.LoginControle;
-import Modelo.LoginModelo;
+import Controle.SearchLoginControle;
+import Modelo.SearchLoginModelo;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 
-public class LoginView extends javax.swing.JFrame{
+public class SearchLoginView extends javax.swing.JFrame{
 
     private JPanel panelMain;
     private JTextField txt_User;
@@ -18,22 +18,22 @@ public class LoginView extends javax.swing.JFrame{
     private JButton criarLoginButton;
 
 
-    public LoginView() {
+    public SearchLoginView() {
         btn_login.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String user = txt_User.getText();
                 String password = Arrays.toString(txt_Password.getPassword());
 
-                LoginModelo usuario = new LoginModelo(user, password);
-                LoginControle controle = new LoginControle();
+                SearchLoginModelo usuario = new SearchLoginModelo(user, password);
+                SearchLoginControle controle = new SearchLoginControle();
 
                 if (controle.validaUsuario(usuario)) {
                     JOptionPane.showMessageDialog(null, "Login bem-sucedido!");
 
                     UserView TelaUser = new UserView();
                     TelaUser.setVisible(true);
-                    //this.setClose(true);
+                    SearchLoginView.this.dispose();
                 }
                 else {
                     JOptionPane.showMessageDialog(null, "Usuário e Senha não encontrado !");}
@@ -58,7 +58,7 @@ public class LoginView extends javax.swing.JFrame{
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 JFrame frame = new JFrame("Tela de Login");
-                frame.setContentPane(new LoginView().panelMain);
+                frame.setContentPane(new SearchLoginView().panelMain);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.pack();
                 frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
