@@ -3,16 +3,16 @@ package Modelo;
 public class Create_Modelo {
     private int id;
     private String nome;
-    private int cpf;
-    private String função;
+    private String cpf;
+    private String funcao;
     private String senha;
 
-    public Create_Modelo(String NOME){
+    public Create_Modelo(String NOME, String CPF, String FUNCAO, String SENHA){
         //this.id = ID;
         this.nome = NOME;
-        /*this.cpf = CPF;
-        this.função = FUNÇÃO;
-        this.senha = SENHA;*/
+        this.cpf = CPF;
+        this.funcao = FUNCAO;
+        this.senha = SENHA;
     }
 
     public int getId() {
@@ -31,20 +31,20 @@ public class Create_Modelo {
         this.nome = nome;
     }
 
-    public int getCpf() {
+    public String getCpf() {
         return cpf;
     }
 
-    public void setCpf(int cpf) {
+    public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 
     public String getFunção() {
-        return função;
+        return funcao;
     }
 
     public void setFunção(String função) {
-        this.função = função;
+        this.funcao = função;
     }
 
     public String getSenha() {
@@ -53,5 +53,16 @@ public class Create_Modelo {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    @Override
+    public String toString() {
+        return "Create_Modelo{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", cpf='" + cpf + '\'' +
+                ", função='" + funcao + '\'' +
+                ", senha='" + senha + '\'' +
+                '}';
     }
 }

@@ -1,5 +1,7 @@
 package Controle;
 
+import Modelo.Create_Modelo;
+
 public interface ICreate_Controle {
-    void adicionarPessoa(String nome);
+    boolean adicionarPessoa(Create_Modelo usuario);
 }

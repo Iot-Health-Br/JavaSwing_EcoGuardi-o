@@ -26,6 +26,9 @@ public class SearchLoginView extends JFrame{
                 SearchModelo usuario = new SearchModelo(user, password);
                 SearchControle controle = new SearchControle();
 
+                //SearchControle controle = new SearchControle();
+                //controle.validaUsuario(user, password);
+
                 if (controle.validaUsuario(usuario)) {
                     JOptionPane.showMessageDialog(null, "Login bem-sucedido!");
 

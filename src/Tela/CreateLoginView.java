@@ -2,6 +2,7 @@ package Tela;
 
 import Controle.Create_Controle;
 import Controle.ICreate_Controle;
+import Modelo.Create_Modelo;
 import Persistencia.Create_Dao;
 import Persistencia.ICreate_Dao;
 
@@ -22,12 +23,10 @@ public class CreateLoginView extends JFrame{
     private JRadioButton analistaRadioButton;
     JPanel panelMain;
 
-    public String user = "";
-    public String analist = "";
+    public String funcao = "";
 
     public void limparCampos(){
-        analist = "";
-        user = "";
+        funcao = "";
         txt_Nome.setText("");
         txt_CPF.setText("");
         txt_Senha1.setText("");
@@ -40,13 +39,13 @@ public class CreateLoginView extends JFrame{
         usuárioRadioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                user = "USUARIO";
+                funcao = "USUARIO";
             }
         });
         analistaRadioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                analist = "ANALISTA";
+                funcao = "ANALISTA";
             }
         });
         btn_Novo.addActionListener(new ActionListener() {
@@ -59,17 +58,6 @@ public class CreateLoginView extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-
-                    String nome = txt_Nome.getText();
-                    String cpf = Arrays.toString(txt_CPF.getPassword());
-                    String senha = Arrays.toString(txt_Senha1.getPassword());
-
-                    ICreate_Dao pessoaDao = new Create_Dao();
-                    ICreate_Controle pessoaControle = new Create_Controle();
-                    pessoaControle.adicionarPessoa(nome);
-
-
-                    /*
                     String senha1 = Arrays.toString(txt_Senha1.getPassword());
                     String senha2 = Arrays.toString(txt_Senha2.getPassword());
 
@@ -79,18 +67,16 @@ public class CreateLoginView extends JFrame{
                     else if (!senha1.equals(senha2)) {
                         txt_Senha1.setText("");
                         txt_Senha2.setText("");
-                        JOptionPane.showMessageDialog(null, "As senhas não condizem !");}
+                        JOptionPane.showMessageDialog(null, "As Senhas não Condizem !");}
                     else {
-                        String nome = txt_Nome.getText();
-                        String cpf = Arrays.toString(txt_CPF.getPassword());
-                        String senha = Arrays.toString(txt_Senha1.getPassword());
-
-                        ICreateLoginDao pessoaDao = new CreateLoginDao();
-                        ICreateLoginControle pessoaControle = new CreateLoginControle();
-                        pessoaControle.adicionarPessoa(nome);
-
-                        JOptionPane.showMessageDialog(null, "Usuário Cadastrado com sucesso !");
-                        limparCampos();}*/
+                        Create_Modelo usuario = new Create_Modelo(txt_Nome.getText().toUpperCase(),txt_CPF.getText(),funcao,txt_Senha1.getText());
+                        ICreate_Controle controle = new Create_Controle(new Create_Dao());
+                        boolean sucesso = controle.adicionarPessoa(usuario);
+                            if (sucesso) {
+                                JOptionPane.showMessageDialog(null, "Usuário Cadastrado com sucesso");}
+                            else {
+                                JOptionPane.showMessageDialog(null, "Erro ao Cadastrar o usuário");}
+                                limparCampos();}
                 }
                 catch (Exception erro){}
             }
