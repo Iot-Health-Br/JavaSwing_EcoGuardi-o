@@ -3,6 +3,7 @@ package Modelo;
 public class SearchModelo {
     private String username;
     private String password;
+    private String Funcao;
 
     public SearchModelo(String user, String password){
         this.username = user;
@@ -23,5 +24,13 @@ public class SearchModelo {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getFuncao() {
+        return Funcao;
+    }
+
+    public void setFuncao(String funcao) {
+        Funcao = funcao;
     }
 }

@@ -23,6 +23,7 @@ public class UserView extends javax.swing.JFrame{
     private JPasswordField passwordField3;
     private JButton FOTOSButton;
     private JTextArea textArea2;
+    private JComboBox comboBox4;
 
     public UserView() {
         FOTOSButton.addActionListener(new ActionListener() {

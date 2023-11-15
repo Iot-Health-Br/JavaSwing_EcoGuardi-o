@@ -8,7 +8,6 @@ import Persistencia.SearchDao;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 
 public class SearchLoginView extends JFrame{
     JPanel panelMainL;
@@ -28,14 +27,28 @@ public class SearchLoginView extends JFrame{
                 boolean sucesso = controle.validaUsuario(usuario);
 
                 if (sucesso) {
-                    JOptionPane.showMessageDialog(null, "Bem Vindo ao EcoGuardião");
-                    UserView TelaUser = new UserView();
-                    TelaUser.setTitle("EcoGuardian - Tela de Denuncias");
-                    TelaUser.setContentPane(TelaUser.panelMain);
-                    TelaUser.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                    TelaUser.setVisible(true); // Torna o novo JFrame visível
-                    // Fecha o JFrame 'login'
-                    SearchLoginView.this.dispose();}
+                    String perfil = usuario.getFuncao();
+
+                    if (perfil.equals("USUARIO")) {
+                        JOptionPane.showMessageDialog(null, "Bem Vindo ao EcoGuardião");
+                        UserView TelaUser = new UserView();
+                        TelaUser.setTitle("EcoGuardian - Tela de Denuncias");
+                        TelaUser.setContentPane(TelaUser.panelMain);
+                        TelaUser.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                        TelaUser.setVisible(true); // Torna o novo JFrame visível
+                        // Fecha o JFrame 'login'
+                        SearchLoginView.this.dispose();}
+
+                    else if (perfil.equals("ANALISTA")){
+                        JOptionPane.showMessageDialog(null, "Bem Vindo, Analista");
+                        AnalistView TelaAnalista = new AnalistView();
+                        TelaAnalista.setTitle("EcoGuardian - Gestão de Denuncias");
+                        TelaAnalista.setContentPane(TelaAnalista.panelMainA);
+                        TelaAnalista.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                        TelaAnalista.setVisible(true); // Torna o novo JFrame visível
+                        // Fecha o JFrame 'login'
+                        SearchLoginView.this.dispose();}
+                }
                 else {
                     JOptionPane.showMessageDialog(null, "Usuário e Senha não encontrado !");}
             }
