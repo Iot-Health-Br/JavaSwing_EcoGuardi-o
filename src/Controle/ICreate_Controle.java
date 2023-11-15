@@ -1,5 +1,5 @@
 package Controle;
 
-public interface ICreateLoginControle {
+public interface ICreate_Controle {
     void adicionarPessoa(String nome);
 }

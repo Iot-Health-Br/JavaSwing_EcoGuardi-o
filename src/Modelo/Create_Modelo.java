@@ -1,15 +1,13 @@
 package Modelo;
 
-import Controle.CreateLoginControle;
-
-public class CreateLoginModelo {
+public class Create_Modelo {
     private int id;
     private String nome;
     private int cpf;
     private String função;
     private String senha;
 
-    public CreateLoginModelo(String NOME){
+    public Create_Modelo(String NOME){
         //this.id = ID;
         this.nome = NOME;
         /*this.cpf = CPF;

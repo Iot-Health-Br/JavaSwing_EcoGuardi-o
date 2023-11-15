@@ -1,19 +1,21 @@
 package Persistencia;
 import Conexão.DatabaseConnection;
-import Modelo.SearchLoginModelo;
+import Modelo.SearchModelo;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class SearchLoginDao implements ISearchLoginDao {
+public class SearchDao implements ISearchDao {
     private static final String TABELA_LOGIN = "tabeladeusuario";
     private static final String COLUNA_ID = "id";
     private static final String COLUNA_USER = "nome";
+    private static final String COLUNA_CPF = "cpf";
+    private static final String COLUNA_FUNÇÃO = "funcao";
     private static final String COLUNA_PASSWORD = "senha";
 
     @Override
-    public boolean validaUsuario(SearchLoginModelo usuario) {
+    public boolean validaUsuario(SearchModelo usuario) {
 
         try (Connection conexao = DatabaseConnection.getConnection();
              PreparedStatement statement = conexao.prepareStatement( String.format("SELECT * FROM %s WHERE %s = ? AND %s = ?", TABELA_LOGIN, COLUNA_USER, COLUNA_PASSWORD))) {

@@ -1,32 +1,35 @@
 package Persistencia;
 import Conexão.DatabaseConnection;
-import Modelo.CreateLoginModelo;
+import Modelo.Create_Modelo;
 
 import javax.swing.*;
 import java.sql.*;
 
-public class CreateLoginDao implements ICreateLoginDao {
-    private static final String TABELA_USUARIOS = "tabelaDeUsuarios";
+public class Create_Dao implements ICreate_Dao {
+    private static final String TABELA_USUARIOS = "tabeladeusuario";
     private static final String COLUNA_ID = "id";
     private static final String COLUNA_NOME = "nome";
     private static final String COLUNA_CPF = "cpf";
+    private static final String COLUNA_FUNÇÃO = "perfil";
     private static final String COLUNA_SENHA = "senha";
 
-    public CreateLoginDao() {
+    public Create_Dao() {
+
         criarTabela();
     }
     private void criarTabela() {
         try (Connection conexao = DatabaseConnection.getConnection();
              Statement statement = conexao.createStatement()) {
-            String query = String.format("CREATE TABLE IF NOT EXISTS %s (%s SERIAL PRIMARY KEY, %s VARCHAR(255)UNIQUE, %s BYTEA not null)",
-                    TABELA_USUARIOS, COLUNA_ID, COLUNA_NOME);
+            String query = String.format("CREATE TABLE IF NOT EXISTS %s (%s SERIAL PRIMARY KEY, %s VARCHAR(255)UNIQUE,  %s VARCHAR(255)UNIQUE," +
+                            " %s VARCHAR(255)UNIQUE, %s VARCHAR(255)UNIQUE)",
+                    TABELA_USUARIOS, COLUNA_ID, COLUNA_NOME, COLUNA_FUNÇÃO,COLUNA_SENHA);
             statement.executeUpdate(query);}
         catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao criar tabela de Pessoa");}
     }
 
-    public CreateLoginModelo adicionarPessoa(String nome) {
+    public Create_Modelo adicionarPessoa(String nome) {
 
         try (Connection conexao = DatabaseConnection.getConnection();
 
@@ -38,7 +41,7 @@ public class CreateLoginDao implements ICreateLoginDao {
 
              // Inserir a PESSOA no banco de dados
              PreparedStatement insercaoStatement = conexao.prepareStatement(
-                     String.format("INSERT INTO %s (%s,%s) VALUES (?,?) ", TABELA_USUARIOS, COLUNA_NOME),
+                     String.format("INSERT INTO %s (%s) VALUES (?) ", TABELA_USUARIOS, COLUNA_NOME),
                      Statement.RETURN_GENERATED_KEYS)) {
 
 
@@ -60,7 +63,7 @@ public class CreateLoginDao implements ICreateLoginDao {
             try (ResultSet generatedKeys = insercaoStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     int id = generatedKeys.getInt(0);
-                    return new CreateLoginModelo( nome);}
+                    return new Create_Modelo( nome);}
                 else {
                     return null;}}
         }

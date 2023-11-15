@@ -1,10 +1,10 @@
 package Modelo;
 
-public class SearchLoginModelo {
+public class SearchModelo {
     private String username;
     private String password;
 
-    public SearchLoginModelo(String user, String password){
+    public SearchModelo(String user, String password){
         this.username = user;
         this.password = password;
     }

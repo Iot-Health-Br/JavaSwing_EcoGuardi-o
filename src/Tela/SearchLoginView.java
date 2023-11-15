@@ -1,22 +1,20 @@
 package Tela;
 
-import Controle.SearchLoginControle;
-import Modelo.SearchLoginModelo;
+import Controle.SearchControle;
+import Modelo.SearchModelo;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 
-public class SearchLoginView extends javax.swing.JFrame{
-
-    private JPanel panelMain;
+public class SearchLoginView extends JFrame{
+    JPanel panelMainL;
     private JTextField txt_User;
     private JPasswordField txt_Password;
     private JButton btn_login;
     private JButton esqueceuASenhaButton;
     private JButton criarLoginButton;
-
 
     public SearchLoginView() {
         btn_login.addActionListener(new ActionListener() {
@@ -25,16 +23,19 @@ public class SearchLoginView extends javax.swing.JFrame{
                 String user = txt_User.getText();
                 String password = Arrays.toString(txt_Password.getPassword());
 
-                SearchLoginModelo usuario = new SearchLoginModelo(user, password);
-                SearchLoginControle controle = new SearchLoginControle();
+                SearchModelo usuario = new SearchModelo(user, password);
+                SearchControle controle = new SearchControle();
 
                 if (controle.validaUsuario(usuario)) {
                     JOptionPane.showMessageDialog(null, "Login bem-sucedido!");
 
                     UserView TelaUser = new UserView();
-                    TelaUser.setVisible(true);
-                    SearchLoginView.this.dispose();
-                }
+                    TelaUser.setTitle("EcoGuardian - Tela de Denuncias");
+                    TelaUser.setContentPane(TelaUser.panelMain);
+                    TelaUser.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                    TelaUser.setVisible(true); // Torna o novo JFrame visível
+                    // Fecha o JFrame 'login'
+                    SearchLoginView.this.dispose();}
                 else {
                     JOptionPane.showMessageDialog(null, "Usuário e Senha não encontrado !");}
             }
@@ -48,7 +49,13 @@ public class SearchLoginView extends javax.swing.JFrame{
         criarLoginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                CreateLoginView novoLogin = new CreateLoginView();
+                novoLogin.setTitle("EcoGuardian - Tela de Cadastro");
+                novoLogin.setContentPane(novoLogin.panelMain);
+                novoLogin.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                novoLogin.setVisible(true); // Torna o novo JFrame visível
+                // Fecha o JFrame 'login'
+                SearchLoginView.this.dispose(); // 'login' é a instância do seu JFrame atual
             }
         });
     }
@@ -57,9 +64,10 @@ public class SearchLoginView extends javax.swing.JFrame{
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                JFrame frame = new JFrame("Tela de Login");
-                frame.setContentPane(new SearchLoginView().panelMain);
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                SearchLoginView frame = new SearchLoginView();
+                frame.setTitle("EcoGuardian - Tela de Login");
+                frame.setContentPane(frame.panelMainL);
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 frame.pack();
                 frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
                 frame.setVisible(true);

@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class UserView extends javax.swing.JFrame{
-    private JPanel panelMain;
+    JPanel panelMain;
     private JTextField textField1;
     private JTable table1;
     private JComboBox comboBox1;
@@ -45,16 +45,14 @@ public class UserView extends javax.swing.JFrame{
         });
     }
 
-    public void setVisible(boolean b) {
-    }
-
     public static void main(String[] args) {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                JFrame frame = new JFrame("Tela de Denuncia");
-                frame.setContentPane(new UserView().panelMain);
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                UserView frame = new UserView();
+                frame.setTitle("EcoGuardian - Tela de Denuncias");
+                frame.setContentPane(frame.panelMain);
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 frame.pack();
                 frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
                 frame.setVisible(true);
