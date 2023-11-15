@@ -1,7 +1,9 @@
 package Tela;
 
+import Controle.ISearchControle;
 import Controle.SearchControle;
 import Modelo.SearchModelo;
+import Persistencia.SearchDao;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -20,18 +22,13 @@ public class SearchLoginView extends JFrame{
         btn_login.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String user = txt_User.getText();
-                String password = Arrays.toString(txt_Password.getPassword());
 
-                SearchModelo usuario = new SearchModelo(user, password);
-                SearchControle controle = new SearchControle();
+                SearchModelo usuario = new SearchModelo(txt_User.getText().toUpperCase(),txt_Password.getText());
+                ISearchControle controle = new SearchControle(new SearchDao());
+                boolean sucesso = controle.validaUsuario(usuario);
 
-                //SearchControle controle = new SearchControle();
-                //controle.validaUsuario(user, password);
-
-                if (controle.validaUsuario(usuario)) {
-                    JOptionPane.showMessageDialog(null, "Login bem-sucedido!");
-
+                if (sucesso) {
+                    JOptionPane.showMessageDialog(null, "Bem Vindo ao EcoGuardião");
                     UserView TelaUser = new UserView();
                     TelaUser.setTitle("EcoGuardian - Tela de Denuncias");
                     TelaUser.setContentPane(TelaUser.panelMain);

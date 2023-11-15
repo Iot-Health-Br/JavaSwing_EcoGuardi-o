@@ -18,10 +18,9 @@ public class SearchDao implements ISearchDao {
     public boolean validaUsuario(SearchModelo usuario) {
 
         try (Connection conexao = DatabaseConnection.getConnection();
-             PreparedStatement statement = conexao.prepareStatement( String.format("SELECT * FROM %s WHERE %s = ? AND %s = ?", TABELA_LOGIN, COLUNA_USER, COLUNA_PASSWORD))) {
+             PreparedStatement statement = conexao.prepareStatement( String.format("SELECT * FROM %s WHERE %s = ? AND %s = ?", TABELA_LOGIN, COLUNA_CPF, COLUNA_PASSWORD))) {
                 statement.setString(1, usuario.getUsername());
                 statement.setString(2,usuario.getPassword());
-                //statement.setString(2, usuario.getPassword());
                 ResultSet rs = statement.executeQuery();
                 return rs.next();}
         catch (Exception e) {

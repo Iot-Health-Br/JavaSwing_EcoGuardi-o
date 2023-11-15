@@ -26,13 +26,10 @@ public class CreateLoginView extends JFrame{
     public String funcao = "";
 
     public void limparCampos(){
-        funcao = "";
         txt_Nome.setText("");
         txt_CPF.setText("");
         txt_Senha1.setText("");
         txt_Senha2.setText("");
-        //usuárioRadioButton.setSelected(false);
-        //analistaRadioButton.setSelected(false);
     }
 
     public CreateLoginView() {
