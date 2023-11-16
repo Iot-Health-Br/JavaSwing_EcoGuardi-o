@@ -1,6 +1,8 @@
 package Tela;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class AnalistView extends JFrame {
     JPanel panelMainA;
@@ -21,8 +23,24 @@ public class AnalistView extends JFrame {
     private JPasswordField passwordField3;
     private JButton SALVARButton;
     private JComboBox comboBox4;
-    private JButton button1;
     private JTable table1;
+    private JButton SAIRButton;
+    private JButton VOLTARButton;
+
+    public AnalistView() {
+        SAIRButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SearchLoginView novoLogin = new SearchLoginView();
+                novoLogin.setTitle("EcoGuardian - Tela de Cadastro");
+                novoLogin.setContentPane(novoLogin.panelMainL);
+                novoLogin.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                novoLogin.setVisible(true); // Torna o novo JFrame visível
+                // Fecha o JFrame 'login'
+                AnalistView.this.dispose(); // 'login' é a instância do seu JFrame atual
+            }
+        });
+    }
 
     public static void main(String[] args) {
         /* Create and display the form */

@@ -17,6 +17,8 @@ public class SearchLoginView extends JFrame{
     private JButton esqueceuASenhaButton;
     private JButton criarLoginButton;
 
+    public String id ="";
+
     public SearchLoginView() {
         btn_login.addActionListener(new ActionListener() {
             @Override
@@ -28,6 +30,8 @@ public class SearchLoginView extends JFrame{
 
                 if (sucesso) {
                     String perfil = usuario.getFuncao();
+                    // Fornece o id para a tela de denuncias
+                    id = usuario.getId();
 
                     if (perfil.equals("USUARIO")) {
                         JOptionPane.showMessageDialog(null, "Bem Vindo ao EcoGuardião");
@@ -71,6 +75,10 @@ public class SearchLoginView extends JFrame{
                 SearchLoginView.this.dispose(); // 'login' é a instância do seu JFrame atual
             }
         });
+    }
+    // Retorna o ID do Usuário
+    public String getMinhaVariavel() {
+        return id;
     }
 
     public static void main(String[] args) {

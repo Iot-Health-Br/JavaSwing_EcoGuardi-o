@@ -1,6 +1,7 @@
 package Modelo;
 
 public class SearchModelo {
+    private String id;
     private String username;
     private String password;
     private String Funcao;
@@ -8,6 +9,14 @@ public class SearchModelo {
     public SearchModelo(String user, String password){
         this.username = user;
         this.password = password;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -32,5 +41,10 @@ public class SearchModelo {
 
     public void setFuncao(String funcao) {
         Funcao = funcao;
+    }
+
+    public String SearchId() {
+        String id = getId();
+        return id;
     }
 }
