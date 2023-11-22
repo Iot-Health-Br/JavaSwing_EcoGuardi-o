@@ -19,10 +19,14 @@ public class UserModelo {
     private String Autor ="";
     private String Descricao ="";
     private String Atualizacao ="";
-    private String IdUsuario = "";
+    private int IdUsuario = 0;
 
+
+    public UserModelo(int IDUSUARIO){
+        this.IdUsuario = IDUSUARIO;
+    }
     public UserModelo(Date data, String status, String sigilo, String categoria, String rua, String bairro, String municipio, String CEP,
-                      String latitude, String longitude, String referencia, String autor, String descricao, String atualizacao, String idUsuario){
+                      String latitude, String longitude, String referencia, String autor, String descricao, String atualizacao, int idUsuario){
         this.Data = data;
         this.Status = status;
         this.Sigilo = sigilo;
@@ -166,11 +170,13 @@ public class UserModelo {
         Atualizacao = atualizacao;
     }
 
-    public String getIdUsuario() {
+    public int getIdUsuario() {
         return IdUsuario;
     }
 
-    public void setIdUsuario(String idUsuario) {
+    public void setIdUsuario(int idUsuario) {
         IdUsuario = idUsuario;
     }
+
+
 }

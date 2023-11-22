@@ -24,7 +24,7 @@ public class SearchDao implements ISearchDao {
             ResultSet rs = statement.executeQuery();
                 if (rs.next()) {
                     // Armazenar o ID e função/perfil do usuário no modelo
-                    usuario.setId(rs.getString(COLUNA_ID));
+                    usuario.setId(rs.getInt(COLUNA_ID));
                     usuario.setFuncao(rs.getString(COLUNA_FUNÇÃO));
                     return true;}
             return false;}

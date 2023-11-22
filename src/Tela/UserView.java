@@ -2,6 +2,7 @@ package Tela;
 
 import Controle.IUserControle;
 import Controle.UserControle;
+import Modelo.SearchModelo;
 import Modelo.UserModelo;
 import Persistencia.UserDao;
 
@@ -35,9 +36,8 @@ public class UserView extends javax.swing.JFrame{
     private JFormattedTextField txt_Latitude;
     private JFormattedTextField txt_Longitude;
 
-    // Recebe o id do usuário !
-    static SearchLoginView obj = new SearchLoginView();
-    static String idUsuario = obj.id;
+    // Recebe o id do usuário da primeira estrutura
+    int userId = SearchModelo.getInstance().getId();
 
     public UserView() {
         IniciarCombox();
@@ -46,14 +46,13 @@ public class UserView extends javax.swing.JFrame{
         btn_Foto.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                JOptionPane.showMessageDialog(null, "Bem vindo ID:"+userId);
             }
         });
         btn_Novo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null,"Usuário id"+idUsuario);
-                txt_Rua.setText(idUsuario.toUpperCase());
+
             }
         });
         btn_Salvar.addActionListener(new ActionListener() {
@@ -72,16 +71,16 @@ public class UserView extends javax.swing.JFrame{
                     UserModelo denuncia = new UserModelo(data, status,sigilo,
                             categoria, txt_Rua.getText(), txt_Bairro.getText(), municipio, txt_Cep.getText(),
                             txt_Latitude.getText(), txt_Longitude.getText(), txt_Referencia.getText(), txt_Autor.getText(), TA_Descricao.getText(),
-                            TA_Atualizacao.getText(), idUsuario);
+                            TA_Atualizacao.getText(), userId);
 
                     IUserControle controle = new UserControle(new UserDao());
                     boolean sucesso = controle.adicionarDenuncia(denuncia);
                     if (sucesso) {
-                        JOptionPane.showMessageDialog(null, "Denuncia Cadastrada com sucesso");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Erro ao Cadastrar o Denuncia");
-                    }
-                }catch (Exception erro){}
+                        JOptionPane.showMessageDialog(null, "Denuncia Cadastrada com sucesso");}
+                    else {
+                        JOptionPane.showMessageDialog(null, "Erro ao Cadastrar o Denuncia");}
+                }
+                catch (Exception erro){}
             }
         });
         SAIRButton.addActionListener(new ActionListener() {

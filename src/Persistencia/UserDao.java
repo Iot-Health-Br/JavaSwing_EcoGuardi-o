@@ -110,7 +110,7 @@ public class UserDao implements IUserDao{
             insercaoStatement.setString(13, usuario.getDescricao());
             insercaoStatement.setString(14, usuario.getAtualizacao());
             insercaoStatement.setBytes(15, usuario.getFoto());
-            insercaoStatement.setString(16, usuario.getIdUsuario());
+            insercaoStatement.setInt(16, usuario.getIdUsuario());
             int affectedRows = insercaoStatement.executeUpdate();
 
             if (affectedRows > 0) {

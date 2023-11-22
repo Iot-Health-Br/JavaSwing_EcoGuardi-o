@@ -7,6 +7,7 @@ public class SearchControle implements ISearchControle {
     private ISearchDao dao;
 
     public SearchControle(ISearchDao dao) {
+
         this.dao = dao;
     }
     @Override
