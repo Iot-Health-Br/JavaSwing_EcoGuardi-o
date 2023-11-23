@@ -4,20 +4,25 @@ import Controle.IUserControle;
 import Controle.UserControle;
 import Modelo.SearchModelo;
 import Modelo.UserModelo;
+import Persistencia.IUserDao;
 import Persistencia.UserDao;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.util.List;
 
 public class UserView extends javax.swing.JFrame{
     JPanel panelMain;
     private JTextField txt_Rua;
-    private JTable table1;
+    private JTable tabelaDenuncia;
     private JComboBox CB_Sigilo;
     private JComboBox CB_Municipio;
     private JTextField txt_Bairro;
@@ -35,9 +40,16 @@ public class UserView extends javax.swing.JFrame{
     private JFormattedTextField txt_Data;
     private JFormattedTextField txt_Latitude;
     private JFormattedTextField txt_Longitude;
+    private JPanel JPanelTabela;
 
     // Recebe o id do usuário da primeira estrutura
     int userId = SearchModelo.getInstance().getId();
+
+    // Data no formato sql, para salvar no banco de dados e apresentar na tela de usuário
+    java.sql.Date sqlDate = java.sql.Date.valueOf(LocalDate.now());
+
+    IUserDao pessoaDao = new UserDao();
+    DefaultTableModel tableModel = (DefaultTableModel) tabelaDenuncia.getModel();
 
     public UserView() {
         IniciarCombox();
@@ -58,29 +70,25 @@ public class UserView extends javax.swing.JFrame{
         btn_Salvar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+              try {
+                  String status = CB_Status.getSelectedItem().toString();
+                  String sigilo = CB_Sigilo.getSelectedItem().toString();
+                  String categoria = CB_Categoria.getSelectedItem().toString();
+                  String municipio = CB_Municipio.getSelectedItem().toString();
 
-                try {
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy"); // Substitua pelo formato de data correto
-                    Date data = formatter.parse(txt_Data.getText());
+                  UserModelo denuncia = new UserModelo(sqlDate, status, sigilo,
+                          categoria, municipio, userId);
 
-                    String status = CB_Status.getSelectedItem().toString();
-                    String sigilo = CB_Sigilo.getSelectedItem().toString();
-                    String categoria = CB_Categoria.getSelectedItem().toString();
-                    String municipio = CB_Municipio.getSelectedItem().toString();
+                  IUserControle controle = new UserControle(new UserDao());
+                  boolean sucesso = controle.adicionarDenuncia(denuncia);
 
-                    UserModelo denuncia = new UserModelo(data, status,sigilo,
-                            categoria, txt_Rua.getText(), txt_Bairro.getText(), municipio, txt_Cep.getText(),
-                            txt_Latitude.getText(), txt_Longitude.getText(), txt_Referencia.getText(), txt_Autor.getText(), TA_Descricao.getText(),
-                            TA_Atualizacao.getText(), userId);
-
-                    IUserControle controle = new UserControle(new UserDao());
-                    boolean sucesso = controle.adicionarDenuncia(denuncia);
-                    if (sucesso) {
-                        JOptionPane.showMessageDialog(null, "Denuncia Cadastrada com sucesso");}
-                    else {
-                        JOptionPane.showMessageDialog(null, "Erro ao Cadastrar o Denuncia");}
-                }
-                catch (Exception erro){}
+                  if (sucesso) {
+                      JOptionPane.showMessageDialog(null, "Denuncia Cadastrada com sucesso");}
+                  else {
+                      JOptionPane.showMessageDialog(null, "Erro ao Cadastrar o Denuncia");}
+              }
+              catch (Exception erro){
+              }
             }
         });
         SAIRButton.addActionListener(new ActionListener() {
@@ -143,32 +151,56 @@ public class UserView extends javax.swing.JFrame{
                 "Uruaçu", "Uruana", "Urutaí", "Valparaíso de Goiás", "Varjão", "Vianópolis", "Vicentinópolis",
                 "Vila Boa", "Vila Propício"
         };
-            for (String municipio : municipios) {
-                CB_Municipio.addItem(municipio);}
+        // Combobox de Municipios
+        for (String municipio : municipios) {
+            CB_Municipio.addItem(municipio);}
 
-        // Sigilo
+        // Combobox de Sigilo
         String[] sigilos = {"","SIM","NÃO"};
         for (String sigilo : sigilos) {
             CB_Sigilo.addItem(sigilo);}
 
-        //Status
+        // Combobox de Status
         String[] status = {"ABERTO"};
         for (String Status : status) {
             CB_Status.addItem(Status);}
 
-        //Tipo
-        String[] denuncias = {"","FAUNA","FLORA","POLUIÇÃO","ADM. AMBIENTAL","OD.URBANO e PATR.CULTURAL"};
+        // Combobox de Tipo
+        String[] denuncias = {"","FAUNA","FLORA","POLUIÇÃO","ADM.AMBIENTAL","OD.URBANO e PATR.CULTURAL"};
         for (String denuncia : denuncias) {
             CB_Categoria.addItem(denuncia);}
     }
-    public void IniciarTela(){
-        //Inicia a Data
-        LocalDate hoje = LocalDate.now();
-        DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String dataFormatada = hoje.format(formatador);
-        txt_Data.setText(dataFormatada);
+    public void IniciarTela() {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String dateString = formatter.format(sqlDate);
+        txt_Data.setText(dateString);
         txt_Data.setEditable(false);
         txt_Data.setEnabled(false);
+
+        //Tabela
+        tabelaDenuncia.setModel(new DefaultTableModel(
+                null,
+                new String[]{"id","nome"}
+        ));
+        TableColumnModel column = tabelaDenuncia.getColumnModel();
+        column.getColumn(0).setMinWidth(10);
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        column.getColumn(1).setCellRenderer(centerRenderer);
+
+        DefaultTableModel tableModel = (DefaultTableModel) tabelaDenuncia.getModel();
+        // Limpar dados existentes na tabela
+        tableModel.setRowCount(0);
+        // Obter lista de Pessoas do banco de dados
+        List<UserModelo> pessoas = pessoaDao.listarDenuncia();
+        // Preencher tabela com os dados das Pessoas
+        for (UserModelo denunciou : pessoas) {
+            Object[] rowData = {denunciou.getId(), denunciou.getData()};
+            tableModel.addRow(rowData);}
+
+        TitledBorder Tabela = BorderFactory.createTitledBorder("Status das Denuncias");
+        JPanelTabela.setBorder(Tabela);
+        JPanelTabela.setPreferredSize(new Dimension(50, 50));
     }
 
     public static void main(String[] args) {
