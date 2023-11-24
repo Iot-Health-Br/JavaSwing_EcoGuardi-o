@@ -180,7 +180,7 @@ public class UserView extends javax.swing.JFrame{
         //Tabela
         tabelaDenuncia.setModel(new DefaultTableModel(
                 null,
-                new String[]{"id","nome"}
+                new String[]{"id","data","status","sigilo","categoria"}
         ));
         TableColumnModel column = tabelaDenuncia.getColumnModel();
         column.getColumn(0).setMinWidth(10);
@@ -192,15 +192,15 @@ public class UserView extends javax.swing.JFrame{
         // Limpar dados existentes na tabela
         tableModel.setRowCount(0);
         // Obter lista de Pessoas do banco de dados
-        List<UserModelo> pessoas = pessoaDao.listarDenuncia();
+        List<UserModelo> pessoas = pessoaDao.listarDenuncia(userId);
         // Preencher tabela com os dados das Pessoas
         for (UserModelo denunciou : pessoas) {
-            Object[] rowData = {denunciou.getId(), denunciou.getData()};
+            Object[] rowData = {denunciou.getId(), denunciou.getData(), denunciou.getStatus(),denunciou.getSigilo(),denunciou.getCategoria()};
             tableModel.addRow(rowData);}
 
         TitledBorder Tabela = BorderFactory.createTitledBorder("Status das Denuncias");
         JPanelTabela.setBorder(Tabela);
-        JPanelTabela.setPreferredSize(new Dimension(50, 50));
+        //JPanelTabela.setPreferredSize(new Dimension(50, 50));
     }
 
     public static void main(String[] args) {

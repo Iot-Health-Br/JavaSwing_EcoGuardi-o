@@ -89,12 +89,44 @@ public class UserDao implements IUserDao{
             return false;}
     }
 
-    public List<UserModelo>listarDenuncia(){
+    public List<UserModelo>listarDenuncia(int idUsuario) {
         List<UserModelo> denuncias = new ArrayList<>();
+
+        String query = "SELECT * FROM " + TABELA_DENUNCIAS + " WHERE IdUsuario = ? ORDER BY id ASC";
+
+        try (Connection conexao = DatabaseConnection.getConnection();
+             PreparedStatement ps = conexao.prepareStatement(query)) {
+
+            ps.setInt(1, idUsuario); // Define o IdUsuario no parâmetro da query
+
+            ResultSet resultSet = ps.executeQuery();
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt(COLUNA_ID);
+                Date data = resultSet.getDate(COLUNA_DATA);
+                String status = resultSet.getString(COLUNA_STATUS);
+                String sigilo = resultSet.getString(COLUNA_SIGILO);
+                String categoria = resultSet.getString(COLUNA_CATEGORIA);
+                String municipio = resultSet.getString(COLUNA_MUNICIPIO); // Ajuste na coluna aqui
+                UserModelo denuncia = new UserModelo(id, data, status, sigilo, categoria, municipio);
+                denuncias.add(denuncia);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return denuncias;
+    }
+
+
+/// ESTE VAI SER DO ANALISTA
+    /*public List<UserModelo>listarDenuncia(){
+        List<UserModelo> denuncias = new ArrayList<>();
+
+        COLUNA_IdUsuario = UserModelo.getIdusuario();
 
         try (Connection conexao = DatabaseConnection.getConnection();
              Statement statement = conexao.createStatement()) {
-            String query = String.format("SELECT * FROM %s ORDER BY id ASC", TABELA_DENUNCIAS);
+            String query = String.format("SELECT * FROM %s where %s ORDER BY id ASC", TABELA_DENUNCIAS,COLUNA_IdUsuario);
 
             ResultSet resultSet = statement.executeQuery(query);
 
@@ -110,5 +142,5 @@ public class UserDao implements IUserDao{
             resultSet.close();}
         catch (SQLException e) {
             e.printStackTrace();}
-        return denuncias;}
+        return denuncias;}*/
 }

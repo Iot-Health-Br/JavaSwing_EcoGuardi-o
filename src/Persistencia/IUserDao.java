@@ -7,5 +7,5 @@ import java.util.List;
 public interface IUserDao {
     boolean adicionarDenuncia(UserModelo usuario);
 
-    List<UserModelo> listarDenuncia();
+    List<UserModelo> listarDenuncia(int userId);
 }

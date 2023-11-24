@@ -21,6 +21,7 @@ public class UserModelo {
         this.Municipio = municipio;
     }
 
+    // Construtor para gerar a denuncia.
     public UserModelo(Date data, String status, String sigilo, String categoria, String municipio, int idUsuario){
         this.Data = data;
         this.Status = status;
