@@ -49,7 +49,6 @@ public class UserView extends javax.swing.JFrame{
     java.sql.Date sqlDate = java.sql.Date.valueOf(LocalDate.now());
 
     IUserDao pessoaDao = new UserDao();
-    DefaultTableModel tableModel = (DefaultTableModel) tabelaDenuncia.getModel();
 
     public UserView() {
         IniciarCombox();
@@ -76,14 +75,19 @@ public class UserView extends javax.swing.JFrame{
                   String categoria = CB_Categoria.getSelectedItem().toString();
                   String municipio = CB_Municipio.getSelectedItem().toString();
 
+                  IUserDao pessoaDao = new UserDao();
+
                   UserModelo denuncia = new UserModelo(sqlDate, status, sigilo,
                           categoria, municipio, userId);
 
-                  IUserControle controle = new UserControle(new UserDao());
+                  IUserControle controle = new UserControle(pessoaDao,(DefaultTableModel) tabelaDenuncia.getModel());
                   boolean sucesso = controle.adicionarDenuncia(denuncia);
 
                   if (sucesso) {
-                      JOptionPane.showMessageDialog(null, "Denuncia Cadastrada com sucesso");}
+                      JOptionPane.showMessageDialog(null, "Denuncia Cadastrada com sucesso");
+                      controle.atualizarTabela(denuncia); // Atualizar a tabela
+                      LimparCampos();
+                  }
                   else {
                       JOptionPane.showMessageDialog(null, "Erro ao Cadastrar o Denuncia");}
               }
@@ -104,6 +108,11 @@ public class UserView extends javax.swing.JFrame{
             }
         });
     }
+
+    public void LimparCampos(){
+
+    }
+
     public void IniciarCombox(){
         String[] municipios = {"",
                 "Abadia de Goiás", "Abadiânia", "Acreúna", "Adelândia", "Água Fria de Goiás",
@@ -176,6 +185,8 @@ public class UserView extends javax.swing.JFrame{
         txt_Data.setText(dateString);
         txt_Data.setEditable(false);
         txt_Data.setEnabled(false);
+        TA_Atualizacao.setEditable(false);
+        TA_Atualizacao.setEnabled(false);
 
         //Tabela
         tabelaDenuncia.setModel(new DefaultTableModel(

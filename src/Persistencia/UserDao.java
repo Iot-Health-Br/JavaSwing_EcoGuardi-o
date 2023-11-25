@@ -62,32 +62,38 @@ public class UserDao implements IUserDao{
     @Override
     public boolean adicionarDenuncia(UserModelo usuario) {
         try (Connection conexao = DatabaseConnection.getConnection();
-
-             // Inserir o usuário no banco de dados
              PreparedStatement insercaoStatement = conexao.prepareStatement(
                      String.format("INSERT INTO %s (%s, %s, %s, %s, %s, %s) VALUES (?, ?, ?, ?, ?, ?)",
                              TABELA_DENUNCIAS, COLUNA_DATA, COLUNA_STATUS, COLUNA_SIGILO, COLUNA_CATEGORIA,
-                             COLUNA_MUNICIPIO, COLUNA_IdUsuario))) {
+                             COLUNA_MUNICIPIO, COLUNA_IdUsuario), Statement.RETURN_GENERATED_KEYS)) {
 
-            // Inserir o usuário no banco de dados
+            // Configuração dos parâmetros
             insercaoStatement.setDate(1, usuario.getData());
             insercaoStatement.setString(2, usuario.getStatus());
             insercaoStatement.setString(3, usuario.getSigilo());
             insercaoStatement.setString(4, usuario.getCategoria());
             insercaoStatement.setString(5, usuario.getMunicipio());
             insercaoStatement.setInt(6, usuario.getIdUsuario());
+
             int affectedRows = insercaoStatement.executeUpdate();
 
             if (affectedRows > 0) {
-                return true;
+                // Recuperar o ID gerado
+                try (ResultSet generatedKeys = insercaoStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        // Atualiza o id do usuário
+                        usuario.setId(generatedKeys.getInt(1));
+                        return true;
+                    }
+                }
             }
-            else {
-                return false;}}
-
-        catch (SQLException e) {
+            return false;
+        } catch (SQLException e) {
             e.printStackTrace();
-            return false;}
+            return false;
+        }
     }
+
 
     public List<UserModelo>listarDenuncia(int idUsuario) {
         List<UserModelo> denuncias = new ArrayList<>();

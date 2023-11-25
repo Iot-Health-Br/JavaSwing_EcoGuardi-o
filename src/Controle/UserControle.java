@@ -9,26 +9,23 @@ import javax.swing.table.DefaultTableModel;
 
 public class UserControle implements IUserControle{
     private IUserDao dao;
-
     private DefaultTableModel tableModel;
 
-    /*// Variaveis pertinentes a tabela
-    private IUserDao pessoaDao;
-    private DefaultTableModel tableModel;
-
-
-    public UserControle(IUserDao pessoaDao, DefaultTableModel tableModel) {
-        this.pessoaDao = pessoaDao;
-        this.tableModel = tableModel;}*/
-
-    public UserControle(IUserDao dao) {
-
+    public UserControle(IUserDao dao, DefaultTableModel tableModel) {
         this.dao = dao;
+        this.tableModel = tableModel;
     }
     @Override
     public boolean adicionarDenuncia(UserModelo denuncia) {
         return dao.adicionarDenuncia(denuncia);
     }
+
+    public void atualizarTabela(UserModelo denuncia) {
+        // Supondo que UserModelo tem métodos para obter seus dados
+        Object[] row = new Object[]{ denuncia.getId(), denuncia.getData(), denuncia.getStatus(), denuncia.getSigilo(), denuncia.getCategoria()};
+        tableModel.addRow(row);
+    }
+
 
     // Linhas da tabela
     private int getRowIndexById(int id) {
