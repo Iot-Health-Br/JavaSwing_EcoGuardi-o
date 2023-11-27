@@ -50,6 +50,14 @@ public class UserView extends javax.swing.JFrame{
 
     IUserDao pessoaDao = new UserDao();
 
+
+
+    /////
+    //private IUserControle control;
+
+
+
+
     public UserView() {
         IniciarCombox();
         IniciarTela();
@@ -63,13 +71,29 @@ public class UserView extends javax.swing.JFrame{
         btn_Novo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                LimparCampos();
             }
         });
         btn_Salvar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
               try {
+
+                  //Persistencia de dados para buscar a ultima denuncia
+                  UserModelo modelo = new UserModelo();
+                  IUserDao dao = new UserDao();
+                  IUserControle control = new UserControle(modelo, dao);
+
+                  //Busca a ultima denuncia para realizar o protocolo
+                  control.buscarUltimaDenuncia();
+
+                  // Protocolo + Ano Atual
+                  int currentYear = LocalDate.now().getYear();
+                  String yearString = String.valueOf(currentYear);
+                  String idString = String.valueOf(modelo.getUltima_Denuncia());
+                  String Protocolo = idString + "/" + yearString;
+
+                  // Pega o item selecionado na combobox
                   String status = CB_Status.getSelectedItem().toString();
                   String sigilo = CB_Sigilo.getSelectedItem().toString();
                   String categoria = CB_Categoria.getSelectedItem().toString();
@@ -77,7 +101,7 @@ public class UserView extends javax.swing.JFrame{
 
                   IUserDao pessoaDao = new UserDao();
 
-                  UserModelo denuncia = new UserModelo(sqlDate, status, sigilo,
+                  UserModelo denuncia = new UserModelo(Protocolo, sqlDate, status, sigilo,
                           categoria, municipio, userId);
 
                   IUserControle controle = new UserControle(pessoaDao,(DefaultTableModel) tabelaDenuncia.getModel());
@@ -110,7 +134,15 @@ public class UserView extends javax.swing.JFrame{
     }
 
     public void LimparCampos(){
-
+        txt_Rua.setText("");
+        txt_Bairro.setText("");
+        txt_Cep.setText("");
+        txt_Latitude.setText("");
+        txt_Longitude.setText("");
+        txt_Referencia.setText("");
+        txt_Autor.setText("");
+        TA_Descricao.setText("");
+        TA_Atualizacao.setText("");
     }
 
     public void IniciarCombox(){
@@ -191,13 +223,17 @@ public class UserView extends javax.swing.JFrame{
         //Tabela
         tabelaDenuncia.setModel(new DefaultTableModel(
                 null,
-                new String[]{"id","data","status","sigilo","categoria"}
+                new String[]{"protocolo","data","status","sigilo","categoria"}
         ));
         TableColumnModel column = tabelaDenuncia.getColumnModel();
-        column.getColumn(0).setMinWidth(10);
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        column.getColumn(0).setMinWidth(10);
+        column.getColumn(0).setCellRenderer(centerRenderer);
         column.getColumn(1).setCellRenderer(centerRenderer);
+        column.getColumn(2).setCellRenderer(centerRenderer);
+        column.getColumn(3).setCellRenderer(centerRenderer);
+        column.getColumn(4).setCellRenderer(centerRenderer);
 
         DefaultTableModel tableModel = (DefaultTableModel) tabelaDenuncia.getModel();
         // Limpar dados existentes na tabela
@@ -206,7 +242,7 @@ public class UserView extends javax.swing.JFrame{
         List<UserModelo> pessoas = pessoaDao.listarDenuncia(userId);
         // Preencher tabela com os dados das Pessoas
         for (UserModelo denunciou : pessoas) {
-            Object[] rowData = {denunciou.getId(), denunciou.getData(), denunciou.getStatus(),denunciou.getSigilo(),denunciou.getCategoria()};
+            Object[] rowData = {denunciou.getProtocolo(), denunciou.getData(), denunciou.getStatus(),denunciou.getSigilo(),denunciou.getCategoria()};
             tableModel.addRow(rowData);}
 
         TitledBorder Tabela = BorderFactory.createTitledBorder("Status das Denuncias");

@@ -15,6 +15,7 @@ public class UserDao implements IUserDao{
     // Busca o ID do usuário
     private static final String TABELA_DENUNCIAS = "tabelaDeDenuncias";
     private static final String COLUNA_ID = "id";
+    private static final String COLUNA_PROTOCOLO = "protocolo";
     private static final String COLUNA_DATA = "data";
     private static final String COLUNA_STATUS = "status";
     private static final String COLUNA_SIGILO = "sigilo";
@@ -43,13 +44,14 @@ public class UserDao implements IUserDao{
              Statement statement = conexao.createStatement()) {
             String query = String.format("CREATE TABLE IF NOT EXISTS %s (" +
                             "%s SERIAL PRIMARY KEY, " + // Coluna ID
+                            "%s VARCHAR NOT NULL, " +  // Coluna PROTOCOLO
                             "%s DATE, " +  // Coluna DATA
                             "%s VARCHAR(15) NOT NULL, " +  // Coluna STATUS
                             "%s VARCHAR(5) NOT NULL, " +  // Coluna SIGILO
                             "%s VARCHAR(50) NOT NULL, " +  // Coluna CATEGORIA
                             "%s VARCHAR(255) NOT NULL, " + // Coluna MUNICIPIO
                             "%s INTEGER)",  // Coluna ID USUÁRIO
-                    TABELA_DENUNCIAS, COLUNA_ID, COLUNA_DATA, COLUNA_STATUS, COLUNA_SIGILO, COLUNA_CATEGORIA,
+                    TABELA_DENUNCIAS, COLUNA_ID, COLUNA_PROTOCOLO, COLUNA_DATA, COLUNA_STATUS, COLUNA_SIGILO, COLUNA_CATEGORIA,
                     COLUNA_MUNICIPIO, COLUNA_IdUsuario);
             statement.executeUpdate(query);
         }
@@ -60,20 +62,37 @@ public class UserDao implements IUserDao{
     }
 
     @Override
+    public int getLastDenunciaId() {
+        int id = 0;
+        try (Connection conexao = DatabaseConnection.getConnection();
+             PreparedStatement statement = conexao.prepareStatement(
+                     String.format("SELECT * FROM %s ORDER BY id DESC LIMIT 1", TABELA_DENUNCIAS));
+             ResultSet rs = statement.executeQuery()) {
+            if (rs.next()) {
+                id = rs.getInt("id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    @Override
     public boolean adicionarDenuncia(UserModelo usuario) {
         try (Connection conexao = DatabaseConnection.getConnection();
              PreparedStatement insercaoStatement = conexao.prepareStatement(
-                     String.format("INSERT INTO %s (%s, %s, %s, %s, %s, %s) VALUES (?, ?, ?, ?, ?, ?)",
-                             TABELA_DENUNCIAS, COLUNA_DATA, COLUNA_STATUS, COLUNA_SIGILO, COLUNA_CATEGORIA,
+                     String.format("INSERT INTO %s (%s,%s, %s, %s, %s, %s, %s) VALUES (?,?, ?, ?, ?, ?, ?)",
+                             TABELA_DENUNCIAS, COLUNA_PROTOCOLO, COLUNA_DATA, COLUNA_STATUS, COLUNA_SIGILO, COLUNA_CATEGORIA,
                              COLUNA_MUNICIPIO, COLUNA_IdUsuario), Statement.RETURN_GENERATED_KEYS)) {
 
             // Configuração dos parâmetros
-            insercaoStatement.setDate(1, usuario.getData());
-            insercaoStatement.setString(2, usuario.getStatus());
-            insercaoStatement.setString(3, usuario.getSigilo());
-            insercaoStatement.setString(4, usuario.getCategoria());
-            insercaoStatement.setString(5, usuario.getMunicipio());
-            insercaoStatement.setInt(6, usuario.getIdUsuario());
+            insercaoStatement.setString(1, usuario.getProtocolo());
+            insercaoStatement.setDate(2, usuario.getData());
+            insercaoStatement.setString(3, usuario.getStatus());
+            insercaoStatement.setString(4, usuario.getSigilo());
+            insercaoStatement.setString(5, usuario.getCategoria());
+            insercaoStatement.setString(6, usuario.getMunicipio());
+            insercaoStatement.setInt(7, usuario.getIdUsuario());
 
             int affectedRows = insercaoStatement.executeUpdate();
 
@@ -81,7 +100,7 @@ public class UserDao implements IUserDao{
                 // Recuperar o ID gerado
                 try (ResultSet generatedKeys = insercaoStatement.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
-                        // Atualiza o id do usuário
+                        // Atualiza o id da denuncia
                         usuario.setId(generatedKeys.getInt(1));
                         return true;
                     }
@@ -108,13 +127,13 @@ public class UserDao implements IUserDao{
             ResultSet resultSet = ps.executeQuery();
 
             while (resultSet.next()) {
-                int id = resultSet.getInt(COLUNA_ID);
+                String protocolo = resultSet.getString(COLUNA_PROTOCOLO);
                 Date data = resultSet.getDate(COLUNA_DATA);
                 String status = resultSet.getString(COLUNA_STATUS);
                 String sigilo = resultSet.getString(COLUNA_SIGILO);
                 String categoria = resultSet.getString(COLUNA_CATEGORIA);
                 String municipio = resultSet.getString(COLUNA_MUNICIPIO); // Ajuste na coluna aqui
-                UserModelo denuncia = new UserModelo(id, data, status, sigilo, categoria, municipio);
+                UserModelo denuncia = new UserModelo(protocolo, data, status, sigilo, categoria, municipio);
                 denuncias.add(denuncia);
             }
         } catch (SQLException e) {

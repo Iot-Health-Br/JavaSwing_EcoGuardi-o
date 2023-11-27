@@ -3,7 +3,9 @@ package Modelo;
 import java.util.Date;
 
 public class UserModelo {
-    private int Id;
+    private int Id = 0;
+    private int Ultima_Denuncia = 0 ;
+    private String Protocolo = "";
     private Date Data;
     private String Status ="";
     private String Sigilo ="";
@@ -12,8 +14,8 @@ public class UserModelo {
     private int IdUsuario = 0;
 
     //Construtor da tabela
-    public UserModelo(int id,Date data, String status, String sigilo, String categoria, String municipio){
-        this.Id = id;
+    public UserModelo(String protocolo,Date data, String status, String sigilo, String categoria, String municipio){
+        this.Protocolo = protocolo;
         this.Data = data;
         this.Status = status;
         this.Sigilo = sigilo;
@@ -22,7 +24,8 @@ public class UserModelo {
     }
 
     // Construtor para gerar a denuncia.
-    public UserModelo(Date data, String status, String sigilo, String categoria, String municipio, int idUsuario){
+    public UserModelo(String protocolo,Date data, String status, String sigilo, String categoria, String municipio, int idUsuario){
+        this.Protocolo = protocolo;
         this.Data = data;
         this.Status = status;
         this.Sigilo = sigilo;
@@ -30,11 +33,26 @@ public class UserModelo {
         this.Municipio = municipio;
         this.IdUsuario = idUsuario;
     }
+    public UserModelo() {
+    }
+
     public int getId() {
         return Id;
     }
     public void setId(int id) {
         Id = id;
+    }
+    public int getUltima_Denuncia() {
+        return Ultima_Denuncia;
+    }
+    public void setUltima_Denuncia(int idUltimaDenuncia) {
+        Ultima_Denuncia = idUltimaDenuncia;
+    }
+    public String getProtocolo() {
+        return Protocolo;
+    }
+    public void setProtocolo(String protocolo) {
+        Protocolo = protocolo;
     }
     public java.sql.Date getData() {
         return (java.sql.Date) Data;
