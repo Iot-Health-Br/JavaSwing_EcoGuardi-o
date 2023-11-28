@@ -50,14 +50,6 @@ public class UserView extends javax.swing.JFrame{
 
     IUserDao pessoaDao = new UserDao();
 
-
-
-    /////
-    //private IUserControle control;
-
-
-
-
     public UserView() {
         IniciarCombox();
         IniciarTela();
@@ -99,7 +91,6 @@ public class UserView extends javax.swing.JFrame{
                   String categoria = CB_Categoria.getSelectedItem().toString();
                   String municipio = CB_Municipio.getSelectedItem().toString();
 
-                  IUserDao pessoaDao = new UserDao();
 
                   UserModelo denuncia = new UserModelo(Protocolo, sqlDate, status, sigilo,
                           categoria, municipio, userId);

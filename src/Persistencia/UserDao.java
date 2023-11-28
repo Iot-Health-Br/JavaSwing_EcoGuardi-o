@@ -2,8 +2,6 @@ package Persistencia;
 
 import Conexão.DatabaseConnection;
 import Modelo.UserModelo;
-import Tela.SearchLoginView;
-import Tela.UserView;
 
 import javax.swing.*;
 import java.sql.*;
@@ -50,9 +48,10 @@ public class UserDao implements IUserDao{
                             "%s VARCHAR(5) NOT NULL, " +  // Coluna SIGILO
                             "%s VARCHAR(50) NOT NULL, " +  // Coluna CATEGORIA
                             "%s VARCHAR(255) NOT NULL, " + // Coluna MUNICIPIO
-                            "%s INTEGER)",  // Coluna ID USUÁRIO
+                            "%s INTEGER, " + // Coluna ID USUÁRIO
+                            "%s INTEGER)",  // Coluna ID ANALISTA
                     TABELA_DENUNCIAS, COLUNA_ID, COLUNA_PROTOCOLO, COLUNA_DATA, COLUNA_STATUS, COLUNA_SIGILO, COLUNA_CATEGORIA,
-                    COLUNA_MUNICIPIO, COLUNA_IdUsuario);
+                    COLUNA_MUNICIPIO, COLUNA_IdUsuario, COLUNA_IdAnalista);
             statement.executeUpdate(query);
         }
         catch (SQLException e) {
@@ -69,11 +68,10 @@ public class UserDao implements IUserDao{
                      String.format("SELECT * FROM %s ORDER BY id DESC LIMIT 1", TABELA_DENUNCIAS));
              ResultSet rs = statement.executeQuery()) {
             if (rs.next()) {
-                id = rs.getInt("id");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                id = rs.getInt("id");}}
+        catch (Exception e) {
+            e.printStackTrace();}
+
         return id;
     }
 
@@ -113,7 +111,6 @@ public class UserDao implements IUserDao{
         }
     }
 
-
     public List<UserModelo>listarDenuncia(int idUsuario) {
         List<UserModelo> denuncias = new ArrayList<>();
 
@@ -141,31 +138,4 @@ public class UserDao implements IUserDao{
         }
         return denuncias;
     }
-
-
-/// ESTE VAI SER DO ANALISTA
-    /*public List<UserModelo>listarDenuncia(){
-        List<UserModelo> denuncias = new ArrayList<>();
-
-        COLUNA_IdUsuario = UserModelo.getIdusuario();
-
-        try (Connection conexao = DatabaseConnection.getConnection();
-             Statement statement = conexao.createStatement()) {
-            String query = String.format("SELECT * FROM %s where %s ORDER BY id ASC", TABELA_DENUNCIAS,COLUNA_IdUsuario);
-
-            ResultSet resultSet = statement.executeQuery(query);
-
-            while (resultSet.next()) {
-                int id = resultSet.getInt(COLUNA_ID);
-                Date data = resultSet.getDate(COLUNA_DATA);
-                String status = resultSet.getString(COLUNA_STATUS);
-                String sigilo = resultSet.getString(COLUNA_SIGILO);
-                String categoria = resultSet.getString(COLUNA_CATEGORIA);
-                String municipio = resultSet.getString(COLUNA_STATUS);
-                UserModelo denuncia = new UserModelo(id, data, status, sigilo, categoria, municipio);
-                denuncias.add(denuncia);}
-            resultSet.close();}
-        catch (SQLException e) {
-            e.printStackTrace();}
-        return denuncias;}*/
 }

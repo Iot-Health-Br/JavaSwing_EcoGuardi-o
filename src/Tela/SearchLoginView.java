@@ -50,7 +50,7 @@ public class SearchLoginView extends JFrame{
                             JOptionPane.showMessageDialog(null, "Bem Vindo, Analista"+ id);
                             AnalistView TelaAnalista = new AnalistView();
                             TelaAnalista.setTitle("EcoGuardian - Gestão de Denuncias");
-                            TelaAnalista.setContentPane(TelaAnalista.panelMainA);
+                            TelaAnalista.setContentPane(TelaAnalista.panelMain);
                             TelaAnalista.setExtendedState(JFrame.MAXIMIZED_BOTH);
                             TelaAnalista.setVisible(true); // Torna o novo JFrame visível
                             // Fecha o JFrame 'login'
