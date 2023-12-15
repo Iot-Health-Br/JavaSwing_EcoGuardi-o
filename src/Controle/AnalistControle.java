@@ -11,10 +11,25 @@ public class AnalistControle implements IAnalistControle {
     private DefaultTableModel tableModel;
     //private IAnalistDao dao = new AnalistDao();
 
+
     public AnalistControle(IAnalistDao dao, DefaultTableModel tableModel) {
         this.dao = dao;
         this.tableModel = tableModel;
     }
+
+
+
+
+
+    public AnalistControle(IAnalistDao dao) {
+        this.dao = dao;
+    }
+    @Override
+    public boolean validaUsuario(AnalistModelo usuario) {
+        return dao.validaUsuario(usuario);
+    }
+
+
 
     public AnalistModelo buscarPorNome(String protocolo) {
         return dao.buscarPorNome(protocolo);

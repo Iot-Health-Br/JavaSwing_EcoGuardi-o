@@ -31,8 +31,33 @@ public class AnalistDao implements IAnalistDao{
     private static final String COLUNA_IdAnalista = "idAnalista";
 
     public AnalistDao(){
-
     }
+
+
+    public boolean validaUsuario(AnalistModelo usuario) {
+        try (Connection conexao = DatabaseConnection.getConnection();
+             PreparedStatement statement = conexao.prepareStatement("SELECT * FROM " + TABELA_DENUNCIAS + " WHERE " + COLUNA_PROTOCOLO + " = ?")) {
+            statement.setString(1, usuario.getProtocolo());
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    usuario.setProtocolo(rs.getString(COLUNA_PROTOCOLO));
+                    usuario.setData(rs.getDate(COLUNA_DATA));
+                    usuario.setStatus(rs.getString(COLUNA_STATUS));
+                    usuario.setSigilo(rs.getString(COLUNA_SIGILO));
+                    usuario.setCategoria(rs.getString(COLUNA_CATEGORIA));
+                    usuario.setMunicipio(rs.getString(COLUNA_MUNICIPIO));
+                    return true;
+                }
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+
     public AnalistModelo buscarPorNome(String protocolo) {
         try (Connection conexao = DatabaseConnection.getConnection();
              PreparedStatement statement = conexao.prepareStatement(String.format("SELECT %s FROM %s", COLUNA_PROTOCOLO,TABELA_DENUNCIAS))) {

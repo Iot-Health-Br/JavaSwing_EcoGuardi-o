@@ -15,7 +15,7 @@ public class CreateLoginView extends JFrame{
     private JTextField txt_Nome;
     private JPasswordField txt_Senha1;
     private JPasswordField txt_Senha2;
-    private JPasswordField txt_CPF;
+    private JFormattedTextField txt_CPF;
     private JButton btn_Novo;
     private JButton btn_Salvar;
     private JButton btn_Voltar;

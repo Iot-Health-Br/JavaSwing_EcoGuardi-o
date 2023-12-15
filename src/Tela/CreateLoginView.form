@@ -64,14 +64,6 @@
             </constraints>
             <properties/>
           </component>
-          <component id="fb604" class="javax.swing.JPasswordField" binding="txt_CPF">
-            <constraints>
-              <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="-1"/>
-              </grid>
-            </constraints>
-            <properties/>
-          </component>
           <component id="5bfa8" class="javax.swing.JTextField" binding="txt_Nome">
             <constraints>
               <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
@@ -119,6 +111,14 @@
             <properties>
               <text value="SALVAR"/>
             </properties>
+          </component>
+          <component id="e6b3f" class="javax.swing.JFormattedTextField" binding="txt_CPF">
+            <constraints>
+              <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties/>
           </component>
         </children>
       </grid>

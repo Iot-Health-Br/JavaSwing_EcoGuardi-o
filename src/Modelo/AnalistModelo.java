@@ -30,6 +30,11 @@ public class AnalistModelo {
         this.Status = status;
     }
 
+
+    public AnalistModelo(String protocolo) {
+        this.Protocolo = protocolo;
+    }
+
     public int getId() {
         return Id;
     }
