@@ -16,6 +16,8 @@
 ### Após o cadastro ele retorna na tela de login, efetua o login que abre na tela pertinente ao cadastro.
 
 #### >Tela Usuário.
+> [!IMPORTANT]
+> O usuário só consegue visualizar suas denuncias criadas.
 
 ![Captura de tela 2023-12-16 141548](https://github.com/Iot-Health-Br/JavaSwing_EcoGuardiao/assets/47635759/198dbe6e-ec46-410e-906b-75a4b1f3fc14)
 
@@ -29,6 +31,15 @@
 > - [x] Municipio 
 
 ![Captura de tela 2023-12-16 142217](https://github.com/Iot-Health-Br/JavaSwing_EcoGuardiao/assets/47635759/489e7548-1f01-44c7-8ee0-e3930a95ad31)
+
+> [!IMPORTANT]
+> O analista consegue visualizar e alterar todas as denuncias criadas no sistema ecoguardião.
+
+> [!WARNING]
+> O sistema EcoGuardião não está 100% concluido.
+> Falta vincular os restante dos campos das denuncias para o usuário e analista.
+> Implementar o SQL de criação da tabela denuncia, com as alterações acima
+> O sistema está funcionado, o usuário consegue criar um denuncia previa e o analista consegue visualiza-lá e alterar o seu status e parametros.
 
 
 
