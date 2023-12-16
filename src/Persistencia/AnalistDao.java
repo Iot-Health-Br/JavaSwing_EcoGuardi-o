@@ -2,6 +2,7 @@ package Persistencia;
 
 import Conexão.DatabaseConnection;
 import Modelo.AnalistModelo;
+import Modelo.UserModelo;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ public class AnalistDao implements IAnalistDao{
     private static final String COLUNA_ID = "id";
     private static final String COLUNA_PROTOCOLO = "protocolo";
     private static final String COLUNA_DATA = "data";
+    private static final String COLUNA_DATA_ATUALIZACAO = "data_atualização";
     private static final String COLUNA_STATUS = "status";
     private static final String COLUNA_SIGILO = "sigilo";
     private static final String COLUNA_CATEGORIA = "categoria";
@@ -34,7 +36,7 @@ public class AnalistDao implements IAnalistDao{
     }
 
 
-    public boolean validaUsuario(AnalistModelo usuario) {
+    public boolean BuscaDenuncia(AnalistModelo usuario) {
         try (Connection conexao = DatabaseConnection.getConnection();
              PreparedStatement statement = conexao.prepareStatement("SELECT * FROM " + TABELA_DENUNCIAS + " WHERE " + COLUNA_PROTOCOLO + " = ?")) {
             statement.setString(1, usuario.getProtocolo());
@@ -56,6 +58,31 @@ public class AnalistDao implements IAnalistDao{
         }
     }
 
+    @Override
+    public boolean AtualizaDenuncia(AnalistModelo usuario) {
+        try (Connection conexao = DatabaseConnection.getConnection();
+             PreparedStatement atualizacaoStatement = conexao.prepareStatement(
+                     String.format("UPDATE %s SET %s = ?, %s = ?, %s = ?, %s = ?, %s = ?, %s = ? WHERE %s = ?",
+                             TABELA_DENUNCIAS, COLUNA_DATA_ATUALIZACAO, COLUNA_STATUS, COLUNA_SIGILO,
+                             COLUNA_CATEGORIA, COLUNA_MUNICIPIO, COLUNA_IdAnalista, COLUNA_PROTOCOLO))) {
+
+            // Configuração dos parâmetros
+            atualizacaoStatement.setDate(1, usuario.getData_Atualizacao());
+            atualizacaoStatement.setString(2, usuario.getStatus());
+            atualizacaoStatement.setString(3, usuario.getSigilo());
+            atualizacaoStatement.setString(4, usuario.getCategoria());
+            atualizacaoStatement.setString(5, usuario.getMunicipio());
+            atualizacaoStatement.setInt(6, usuario.getIdUsuario()); // Supondo que esta seja a chave primária para identificar a denúncia
+            atualizacaoStatement.setString(7, usuario.getProtocolo());
+
+            int affectedRows = atualizacaoStatement.executeUpdate();
+
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 
     public AnalistModelo buscarPorNome(String protocolo) {

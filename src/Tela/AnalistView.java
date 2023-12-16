@@ -16,8 +16,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class AnalistView extends javax.swing.JFrame {
@@ -47,6 +49,7 @@ public class AnalistView extends javax.swing.JFrame {
     private JLabel label_Foto2;
     private JPanel JPanel_Foto2;
     private JFormattedTextField txt_Protocolo;
+    private JFormattedTextField txt_DataAtualizada;
 
     //Id do analista
     int userId = SearchModelo.getInstance().getId();
@@ -78,17 +81,33 @@ public class AnalistView extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                /*
-                if(!txt_Protocolo.getText().equals("")){
-                    String nomePessoa = txt_Nome.getText().toUpperCase(); // Supondo que jTextFieldNomePessoa seja o campo de entrada para o nome da Pessoa
-                    int selectedRow = tabelaPessoas.getSelectedRow();
-                    if (selectedRow != -1) {
-                        int idNome = (int) tabelaDenuncia.getValueAt(selectedRow, 0);
-                        IPessoaControle pessoaControle = new AnalistControle(pessoaDao, (DefaultTableModel) tabelaDenuncia.getModel());
-                        pessoaControle.atualizarPessoa(idNome,nomePessoa,imagemBytes);}
+                try {
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                    String dateString = formatter.format(sqlDate);
+                    txt_DataAtualizada.setText(dateString);
+
+                    // Pega o item selecionado na combobox
+                    String protocolo = txt_Protocolo.getText();
+                    String status = CB_Status.getSelectedItem().toString();
+                    String sigilo = CB_Sigilo.getSelectedItem().toString();
+                    String categoria = CB_Categoria.getSelectedItem().toString();
+                    String municipio = CB_Municipio.getSelectedItem().toString();
+
+                    AnalistModelo denuncia = new AnalistModelo(protocolo, sqlDate, status, sigilo,
+                            categoria, municipio, userId);
+
+                    IAnalistControle controle = new AnalistControle(pessoaDao,(DefaultTableModel) tabelaDenuncia.getModel());
+                    boolean sucesso = controle.AtualizaDenuncia(denuncia);
+
+                    if (sucesso) {
+                        JOptionPane.showMessageDialog(null, "Denuncia Alterada com sucesso");
+                        controle.atualizarTabela(denuncia); // Atualizar a tabela
+                        LimparCampos();}
+                    else {
+                        JOptionPane.showMessageDialog(null, "Erro durante Alterar a Denuncia");}
                 }
-                else{
-                    JOptionPane.showMessageDialog(null, "Campos vazios !");}*/
+                catch (Exception erro){
+                }
             }
         });
         tabelaDenuncia.addMouseListener(new MouseAdapter() {
@@ -97,27 +116,27 @@ public class AnalistView extends javax.swing.JFrame {
                 super.mouseClicked(e);
 
                 int selectedRow = tabelaDenuncia.getSelectedRow();
-                String protocolo = "";
 
                 if (selectedRow != -1) {
-                    //protocolo = (String) tabelaDenuncia.getValueAt(selectedRow, 0);
                     String pessoaSelecionada = (String) tabelaDenuncia.getValueAt(selectedRow, 0);
                     txt_Protocolo.setText(pessoaSelecionada);}
-
 
                 // Injeção de Depêndencia
                 AnalistModelo usuario = new AnalistModelo(txt_Protocolo.getText());
                 IAnalistControle controle = new AnalistControle(new AnalistDao());
-                boolean sucesso = controle.validaUsuario(usuario);
+                boolean sucesso = controle.BuscaDenuncia(usuario);
 
 
                 if (sucesso) {
                     JOptionPane.showMessageDialog(null, ""+usuario.getMunicipio());
 
+                    Date data = usuario.getData();
                     String Status = usuario.getStatus();
                     String Sigilo = usuario.getSigilo();
                     String Categoria = usuario.getCategoria();
                     String Municipio = usuario.getMunicipio();
+
+                    txt_Data.setText(String.valueOf(data));
 
                     boolean status = false;
                     for (int i = 0; i < CB_Status.getItemCount(); i++) {
@@ -180,12 +199,7 @@ public class AnalistView extends javax.swing.JFrame {
                 LimparCampos();
             }
         });
-        btn_Atualizar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
 
-            }
-        });
     }
 
     // Método auxiliar para verificar se a JComboBox contém um determinado valor
@@ -283,8 +297,11 @@ public class AnalistView extends javax.swing.JFrame {
         txt_Data.setText(dateString);
         txt_Data.setEditable(false);
         txt_Data.setEnabled(false);
-        TA_Atualizacao.setEditable(false);
-        TA_Atualizacao.setEnabled(false);
+        txt_DataAtualizada.setEditable(false);
+        txt_DataAtualizada.setEnabled(false);
+        TA_Descricao.setEditable(false);
+        TA_Descricao.setEnabled(false);
+
 
         //Tabela
         tabelaDenuncia.setModel(new DefaultTableModel(

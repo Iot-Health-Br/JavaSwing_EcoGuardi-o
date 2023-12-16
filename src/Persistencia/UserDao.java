@@ -15,6 +15,7 @@ public class UserDao implements IUserDao{
     private static final String COLUNA_ID = "id";
     private static final String COLUNA_PROTOCOLO = "protocolo";
     private static final String COLUNA_DATA = "data";
+    private static final String COLUNA_DATA_ATUALIZAÇÃO = "data_atualização";
     private static final String COLUNA_STATUS = "status";
     private static final String COLUNA_SIGILO = "sigilo";
     private static final String COLUNA_CATEGORIA = "categoria";
@@ -44,13 +45,14 @@ public class UserDao implements IUserDao{
                             "%s SERIAL PRIMARY KEY, " + // Coluna ID
                             "%s VARCHAR NOT NULL, " +  // Coluna PROTOCOLO
                             "%s DATE, " +  // Coluna DATA
+                            "%s DATE, " +  // Coluna DATA ATUALIZAÇÃO
                             "%s VARCHAR(15) NOT NULL, " +  // Coluna STATUS
                             "%s VARCHAR(5) NOT NULL, " +  // Coluna SIGILO
                             "%s VARCHAR(50) NOT NULL, " +  // Coluna CATEGORIA
                             "%s VARCHAR(255) NOT NULL, " + // Coluna MUNICIPIO
                             "%s INTEGER, " + // Coluna ID USUÁRIO
                             "%s INTEGER)",  // Coluna ID ANALISTA
-                    TABELA_DENUNCIAS, COLUNA_ID, COLUNA_PROTOCOLO, COLUNA_DATA, COLUNA_STATUS, COLUNA_SIGILO, COLUNA_CATEGORIA,
+                    TABELA_DENUNCIAS, COLUNA_ID, COLUNA_PROTOCOLO, COLUNA_DATA,COLUNA_DATA_ATUALIZAÇÃO, COLUNA_STATUS, COLUNA_SIGILO, COLUNA_CATEGORIA,
                     COLUNA_MUNICIPIO, COLUNA_IdUsuario, COLUNA_IdAnalista);
             statement.executeUpdate(query);
         }

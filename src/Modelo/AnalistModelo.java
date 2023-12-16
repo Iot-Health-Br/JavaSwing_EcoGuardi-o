@@ -7,6 +7,7 @@ public class AnalistModelo {
     private int Ultima_Denuncia = 0 ;
     private String Protocolo = "";
     private Date Data;
+    private Date Data_Atualizacao;
     private String Status ="";
     private String Sigilo ="";
     private String Categoria ="";
@@ -33,6 +34,20 @@ public class AnalistModelo {
 
     public AnalistModelo(String protocolo) {
         this.Protocolo = protocolo;
+    }
+
+    public AnalistModelo(String protocolo, Date sqlDate, String status, String sigilo, String categoria, String municipio, int userId) {
+        this.Protocolo = protocolo;
+        this.Data_Atualizacao = sqlDate;
+        this.Status = status;
+        this.Sigilo = sigilo;
+        this.Categoria = categoria;
+        this.Municipio = municipio;
+        this.IdUsuario = userId;
+    }
+
+    public AnalistModelo() {
+
     }
 
     public int getId() {
@@ -65,6 +80,14 @@ public class AnalistModelo {
 
     public void setData(Date data) {
         Data = data;
+    }
+
+    public Date getData_Atualizacao() {
+        return Data_Atualizacao;
+    }
+
+    public void setData_Atualizacao(Date data_Atualizacao) {
+        Data_Atualizacao = data_Atualizacao;
     }
 
     public String getStatus() {
